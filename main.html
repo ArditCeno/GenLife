@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="sq" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genlife — Rrjeti Zyrtar Studentor Shkencor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pane: {
+                            50: '#FAF9F6',
+                            100: '#F5F3ED',
+                            200: '#EBE7DC',
+                            300: '#D9D2BF',
+                        },
+                        forest: {
+                            50: '#E8F0E7',
+                            100: '#C7DBC5',
+                            200: '#9DBF9A',
+                            300: '#71A16E',
+                            400: '#4B7253',
+                            500: '#2D5A27', // Primary Accent Spec
+                            600: '#1B4317', // Dark Forest Green Spec
+                            700: '#153512',
+                            800: '#0F260D',
+                            900: '#0A1A09',
+                        },
+                        charcoal: '#1C2520',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF9F6;
+            color: #1C2520;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .glass-header {
+            background: rgba(250, 249, 246, 0.88);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(27, 67, 23, 0.1);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(27, 67, 23, 0.08);
+        }
+        .club-tag-hiking { background-color: #1B4317; color: #FAF9F6; }
+        .club-tag-biologji { background-color: #1E56A0; color: #FAF9F6; }
+        .club-tag-biotek { background-color: #6B21A8; color: #FAF9F6; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-forest-600 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 glass-header transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-11 h-11 rounded-xl bg-forest-600 flex items-center justify-center text-pane-50 shadow-md transform hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-leaf text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold font-serif text-forest-600 tracking-tight">Gen<span class="text-forest-500">life</span></span>
+                        <span class="block text-[10px] text-forest-400 tracking-widest uppercase font-semibold">Rrjeti Studentor Shkencor</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <button onclick="navigateTo('home')" class="nav-btn text-charcoal hover:text-forest-600 transition-colors py-1 font-semibold">Kreu</button>
+                    <button onclick="navigateTo('struktura')" class="nav-btn text-charcoal hover:text-forest-600 transition-colors py-1">Struktura</button>
+                    <button onclick="navigateTo('klubet')" class="nav-btn text-charcoal hover:text-forest-600 transition-colors py-1">Klubet</button>
+                    <button onclick="navigateTo('kalendari')" class="nav-btn text-charcoal hover:text-forest-600 transition-colors py-1">Kalendari</button>
+                    <button onclick="navigateTo('blog')" class="nav-btn text-charcoal hover:text-forest-600 transition-colors py-1">Blog</button>
+                </nav>
+
+                <!-- Header CTA Button -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button onclick="navigateTo('anetesohu')" class="px-6 py-2.5 rounded-full bg-forest-600 hover:bg-forest-500 text-pane-50 font-semibold text-sm transition-all duration-300 shadow-md hover:shadow-lg flex items-center space-x-2">
+                        <i class="fa-solid fa-user-plus text-xs"></i>
+                        <span>Bëhu Anëtar</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 rounded-lg text-forest-600 hover:bg-pane-100 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-pane-50 border-b border-forest-600/10 px-4 pt-2 pb-6 space-y-3">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-semibold text-charcoal hover:bg-forest-50 hover:text-forest-600">Kreu</button>
+            <button onclick="navigateTo('struktura'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-charcoal hover:bg-forest-50 hover:text-forest-600">Struktura Organizational</button>
+            <button onclick="navigateTo('klubet'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-charcoal hover:bg-forest-50 hover:text-forest-600">Seksioni i Klubeve</button>
+            <button onclick="navigateTo('kalendari'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-charcoal hover:bg-forest-50 hover:text-forest-600">Kalendari i Ngjarjeve</button>
+            <button onclick="navigateTo('blog'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-charcoal hover:bg-forest-50 hover:text-forest-600">Blog & Publikime</button>
+            <button onclick="navigateTo('anetesohu'); toggleMobileMenu()" class="w-full mt-3 px-5 py-3 rounded-xl bg-forest-600 text-pane-50 text-center font-bold shadow-md">Bëhu Anëtar i Genlife</button>
+        </div>
+    </header>
+
+    <!-- Dynamic Content Display Area -->
+    <main id="main-content" class="flex-grow">
+        
+        <!-- ==================== FAQJA KRYESORE (HOME) ==================== -->
+        <section id="section-home" class="page-section">
+            
+            <!-- Hero Section -->
+            <div class="relative bg-forest-600 text-pane-50 overflow-hidden py-24 lg:py-32">
+                <img src="https://images.unsplash.com/photo-1511497584788-876761465586?q=80&w=1920&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-overlay" alt="Nature and Science">
+                <div class="absolute inset-0 bg-gradient-to-r from-forest-600 via-forest-600/95 to-forest-600/70"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-3xl">
+                        <span class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-forest-500/40 text-pane-100 text-xs font-semibold tracking-wider uppercase mb-6 backdrop-blur-md border border-forest-400/30">
+                            <i class="fa-solid fa-seedling text-forest-200"></i>
+                            <span>Platforma Zyrtare Studentore</span>
+                        </span>
+                        
+                        <!-- Exact Specified Title -->
+                        <h1 class="text-3xl sm:text-5xl lg:text-12xl font-serif font-bold text-pane-50 leading-tight mb-6">
+                            Eksploro jetën, zbulo shkencën — Mirësevini në Genlife
+                        </h1>
+                        
+                        <p class="text-lg sm:text-xl text-pane-100/90 mb-10 leading-relaxed font-light">
+                            Platforma zyrtare e rrjetit studentor që kombinon shkencën, kërkimin laboratorik dhe eksplorimin e natyrës.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="navigateTo('anetesohu')" class="px-6 py-2 rounded-full bg-pane-50 hover:bg-pane-100 text-forest-600 font-bold text-base transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5">
+                                Bëhu Anëtar
+                            </button>
+                            <button onclick="navigateTo('klubet')" class="px-6 py-2 rounded-full bg-forest-500/30 hover:bg-forest-500/50 text-pane-50 font-semibold text-base transition-all backdrop-blur-md border border-pane-50/20">
+                                Eksploro Klubet
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Bar (Exact Specification: +3 Klube, +250 Studentë, +10 Ekspedita, 1 Universitet) -->
+            <div class="bg-forest-500 border-y border-forest-400/20 py-8 text-pane-50">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                        <div class="p-4 border-r border-forest-400/20 last:border-0">
+                            <span class="block text-4xl sm:text-5xl font-serif font-bold text-pane-50">+3</span>
+                            <span class="text-xs font-semibold uppercase tracking-widest text-forest-100 mt-1 block">Klube Shkencore</span>
+                        </div>
+                        <div class="p-4 border-r border-forest-400/20 last:border-0">
+                            <span class="block text-4xl sm:text-5xl font-serif font-bold text-pane-50">+250</span>
+                            <span class="text-xs font-semibold uppercase tracking-widest text-forest-100 mt-1 block">Studentë Aktivë</span>
+                        </div>
+                        <div class="p-4 border-r border-forest-400/20 last:border-0">
+                            <span class="block text-4xl sm:text-5xl font-serif font-bold text-pane-50">+10</span>
+                            <span class="text-xs font-semibold uppercase tracking-widest text-forest-100 mt-1 block">Ekspedita Natyrore</span>
+                        </div>
+                        <div class="p-4">
+                            <span class="block text-4xl sm:text-5xl font-serif font-bold text-pane-50">1</span>
+                            <span class="text-xs font-semibold uppercase tracking-widest text-forest-100 mt-1 block">Universitet (UT)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Misioni & Vizioni (Aligned with Sketch: Text on side, image block on other side) -->
+            <div class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Narrative Box -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center space-x-2 text-forest-500 font-bold text-xs uppercase tracking-widest">
+                            <span class="w-8 h-0.5 bg-forest-500"></span>
+                            <span>Misioni & Vizioni</span>
+                        </div>
+                        
+                        <h2 class="text-3xl sm:text-4xl font-serif font-bold text-forest-600 leading-snug">
+                            Lidhja e teorisë akademike me praktikën laboratorike dhe terrenin
+                        </h2>
+                        
+                        <p class="text-charcoal/80 leading-relaxed text-base">
+                            Genlife është ndërtuar për të krijuar një mjedis bashkëpunues ku studentët e Biologjisë, Bioteknologjisë dhe dashuruesit e natyrës zhvillojnë aftësi kërkimore, marrin pjesë në praktika profesionale dhe zbulojnë biodiversitetin e Shqipërisë përmes ekspeditave të mirëorganizuara.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                            <div class="p-4 rounded-2xl bg-pane-100 border border-forest-600/10">
+                                <i class="fa-solid fa-book-open text-forest-500 text-xl mb-2"></i>
+                                <h4 class="font-bold text-forest-600 text-sm">Teori e Aplikuar</h4>
+                                <p class="text-xs text-charcoal/70 mt-1">Leksione të hapura nga pedagogët tanë.</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-pane-100 border border-forest-600/10">
+                                <i class="fa-solid fa-flask text-forest-500 text-xl mb-2"></i>
+                                <h4 class="font-bold text-forest-600 text-sm">Laborator</h4>
+                                <p class="text-xs text-charcoal/70 mt-1">Trajnime në softuerë biologjikë dhe PCR.</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-pane-100 border border-forest-600/10">
+                                <i class="fa-solid fa-mountain-sun text-forest-500 text-xl mb-2"></i>
+                                <h4 class="font-bold text-forest-600 text-sm">Terren & Hiking</h4>
+                                <p class="text-xs text-charcoal/70 mt-1">Monitorim i ekosistemeve natyrore.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Container (Wireframe Visual Spec) -->
+                    <div class="lg:col-span-5">
+                        <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                            <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=800&auto=format&fit=crop" alt="Lab Research" class="w-full h-[460px] object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-forest-600/90 via-transparent to-transparent flex flex-col justify-end p-8 text-pane-50">
+                                <span class="bg-forest-500 text-pane-50 font-bold text-xs px-3 py-1 rounded-full w-max mb-2">Genlife Field & Lab</span>
+                                <h3 class="text-2xl font-bold font-serif">Kërkim Shkencor i Zhvilluar</h3>
+                                <p class="text-xs text-pane-100/80 mt-1">Nga laboratori në Alpet e Shqipërisë.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 3 Shtyllat (Klubet Visual Cards) -->
+            <div class="py-16 bg-pane-100/70 border-t border-forest-600/5">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    
+                    <div class="text-center max-w-2xl mx-auto mb-14">
+                        <span class="text-forest-500 font-bold text-xs tracking-widest uppercase">Tri Shtyllat Kryesore</span>
+                        <h2 class="text-3xl font-serif font-bold text-forest-600 mt-1">Klubet e Genlife</h2>
+                        <p class="text-charcoal/70 text-sm mt-2">Zgjidhni shtyllën që i përshtatet pasionit dhe drejtimit tuaj akademik.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Klubi 1: Hiking -->
+                        <div class="glass-card rounded-3xl p-8 hover:shadow-2xl transition-all duration-300 border border-forest-600/10 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-14 h-14 rounded-2xl bg-forest-50 flex items-center justify-center text-forest-500 mb-6 group-hover:bg-forest-600 group-hover:text-pane-50 transition-colors">
+                                    <i class="fa-solid fa-person-hiking text-2xl"></i>
+                                </div>
+                                <span class="text-xs font-bold text-forest-500 uppercase tracking-wider">🟢 Hapur për gjithë UT</span>
+                                <h3 class="text-2xl font-serif font-bold text-forest-600 mt-1 mb-3">Klubi i Hiking & Ekspeditave</h3>
+                                <p class="text-sm text-charcoal/70 leading-relaxed mb-6">
+                                    Përmban rolin e pedagogut të natyrës, udhëzuesin e pajisjeve dhe ekspeditat për monitorimin e faunës dhe florës.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('klubet', 'hiking')" class="inline-flex items-center text-sm font-bold text-forest-600 group-hover:text-forest-500">
+                                <span>Shiko Detajet e Klubit</span>
+                                <i class="fa-solid fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+
+                        <!-- Klubi 2: Biologji -->
+                        <div class="glass-card rounded-3xl p-8 hover:shadow-2xl transition-all duration-300 border border-forest-600/10 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-14 h-14 rounded-2xl bg-forest-50 flex items-center justify-center text-forest-500 mb-6 group-hover:bg-forest-600 group-hover:text-pane-50 transition-colors">
+                                    <i class="fa-solid fa-dna text-2xl"></i>
+                                </div>
+                                <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">🔵 Kërkim & Terren</span>
+                                <h3 class="text-2xl font-serif font-bold text-forest-600 mt-1 mb-3">Klubi i Biologjisë</h3>
+                                <p class="text-sm text-charcoal/70 leading-relaxed mb-6">
+                                    Fokusuar në leksione të hapura, fushata mjedisore dhe projekte kërkimore shkencore në terren e laborator.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('klubet', 'biologji')" class="inline-flex items-center text-sm font-bold text-forest-600 group-hover:text-forest-500">
+                                <span>Shiko Detajet e Klubit</span>
+                                <i class="fa-solid fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+
+                        <!-- Klubi 3: Bioteknologji -->
+                        <div class="glass-card rounded-3xl p-8 hover:shadow-2xl transition-all duration-300 border border-forest-600/10 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-14 h-14 rounded-2xl bg-forest-50 flex items-center justify-center text-forest-500 mb-6 group-hover:bg-forest-600 group-hover:text-pane-50 transition-colors">
+                                    <i class="fa-solid fa-microscope text-2xl"></i>
+                                </div>
+                                <span class="text-xs font-bold text-purple-600 uppercase tracking-wider">🟣 Praktika & Softuerë</span>
+                                <h3 class="text-2xl font-serif font-bold text-forest-600 mt-1 mb-3">Klubi i Bioteknologjisë</h3>
+                                <p class="text-sm text-charcoal/70 leading-relaxed mb-6">
+                                    Lidhja me praktikën (internships), workshop-et me softuerë biologjikë dhe trajnimet në pajisje laboratorike.
+                                </p>
+                            </div>
+                            <button onclick="navigateTo('klubet', 'bioteknologji')" class="inline-flex items-center text-sm font-bold text-forest-600 group-hover:text-forest-500">
+                                <span>Shiko Detajet e Klubit</span>
+                                <i class="fa-solid fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== STRUKTURA ORGANIZATIVE ==================== -->
+        <section id="section-struktura" class="page-section hidden py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-forest-500 font-bold text-xs tracking-widest uppercase">Ekipi Udhëheqës</span>
+                <h1 class="text-4xl font-serif font-bold text-forest-600 mt-1">Bordi Ekzekutiv Qendror & Mentorët</h1>
+                <p class="text-charcoal/70 mt-3 text-base">Transparenca institucionale dhe drejtuesit e rrjetit Genlife dhe mbështetja akademike.</p>
+            </div>
+
+            <!-- Executive Board Cards (Exact Document Names) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+                
+                <!-- Member 1: Dr. Elona Rada -->
+                <div class="glass-card rounded-3xl p-6 text-center hover:shadow-xl transition-all border border-forest-600/10">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop" class="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-forest-500/20 shadow-md">
+                    <span class="px-3 py-1 rounded-full bg-forest-50 text-forest-600 text-[11px] font-bold uppercase tracking-wider">Mentore / Pedagoge</span>
+                    <h3 class="text-xl font-bold font-serif text-forest-600 mt-3">Dr. Elona Rada</h3>
+                    <p class="text-xs text-charcoal/70 mt-2">Këshilltare Akademike & Koordinatore e Projekteve Shkencore</p>
+                </div>
+
+                <!-- Member 2: Gentian Bika -->
+                <div class="glass-card rounded-3xl p-6 text-center hover:shadow-xl transition-all border border-forest-600/10">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop" class="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-forest-500/20 shadow-md">
+                    <span class="px-3 py-1 rounded-full bg-forest-50 text-forest-600 text-[11px] font-bold uppercase tracking-wider">Kryetar / Bashkë-themelues</span>
+                    <h3 class="text-xl font-bold font-serif text-forest-600 mt-3">Gentian Bika</h3>
+                    <p class="text-xs text-charcoal/70 mt-2">Drejtimi Ekzekutiv & Fizioterapi / Koordinimi i Rrjetit</p>
+                </div>
+
+                <!-- Member 3: Sara Gjini -->
+                <div class="glass-card rounded-3xl p-6 text-center hover:shadow-xl transition-all border border-forest-600/10">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400&auto=format&fit=crop" class="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-forest-500/20 shadow-md">
+                    <span class="px-3 py-1 rounded-full bg-forest-50 text-forest-600 text-[11px] font-bold uppercase tracking-wider">Nënkryetare / Bashkë-themeluese</span>
+                    <h3 class="text-xl font-bold font-serif text-forest-600 mt-3">Sara Gjini</h3>
+                    <p class="text-xs text-charcoal/70 mt-2">Financat, Komunikimi Publik & Organizimi i Eventeve</p>
+                </div>
+
+                <!-- Member 4: Prof. Asoc. Arben Dori -->
+                <div class="glass-card rounded-3xl p-6 text-center hover:shadow-xl transition-all border border-forest-600/10">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" class="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-forest-500/20 shadow-md">
+                    <span class="px-3 py-1 rounded-full bg-forest-50 text-forest-600 text-[11px] font-bold uppercase tracking-wider">Këshilltar Shkencor</span>
+                    <h3 class="text-xl font-bold font-serif text-forest-600 mt-3">Prof. Asoc. Arben Dori</h3>
+                    <p class="text-xs text-charcoal/70 mt-2">Supervizor Shkencor & Mbështetje Kërkimore Akademike</p>
+                </div>
+
+            </div>
+
+            <!-- Club Leadership Roles (E. Peshku, A. Ceno, D. Nukaj from Sketch) -->
+            <div class="bg-pane-100 rounded-3xl p-8 border border-forest-600/10 shadow-sm">
+                <h3 class="text-2xl font-serif font-bold text-forest-600 mb-6 text-center">Drejtuesit Studentorë sipas Klubeve</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="flex items-center space-x-4 bg-white p-5 rounded-2xl border border-forest-600/5">
+                        <div class="w-12 h-12 rounded-full bg-forest-600 text-pane-50 flex items-center justify-center font-bold">EP</div>
+                        <div>
+                            <h4 class="font-bold text-forest-600 text-base">E. Peshku</h4>
+                            <p class="text-xs text-charcoal/70">Drejtues i Klubit të Hiking-ut & Ekspeditave</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 bg-white p-5 rounded-2xl border border-forest-600/5">
+                        <div class="w-12 h-12 rounded-full bg-forest-600 text-pane-50 flex items-center justify-center font-bold">AC</div>
+                        <div>
+                            <h4 class="font-bold text-forest-600 text-base">A. Ceno</h4>
+                            <p class="text-xs text-charcoal/70">Koordinator i Klubit të Bioteknologjisë</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 bg-white p-5 rounded-2xl border border-forest-600/5">
+                        <div class="w-12 h-12 rounded-full bg-forest-600 text-pane-50 flex items-center justify-center font-bold">DN</div>
+                        <div>
+                            <h4 class="font-bold text-forest-600 text-base">D. Nukaj</h4>
+                            <p class="text-xs text-charcoal/70">Drejtues i Seksionit të Biologjisë</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SEKSIONI I KLUBEVE (DETAILED TABS) ==================== -->
+        <section id="section-klubet" class="page-section hidden py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-forest-500 font-bold text-xs tracking-widest uppercase">Departamentet & Aktivitetet</span>
+                <h1 class="text-4xl font-serif font-bold text-forest-600 mt-1">Seksioni i Detajuar i Klubeve</h1>
+                <p class="text-charcoal/70 mt-2 text-base">Zgjidhni më poshtë klubin për të parë udhëzimet, pajisjet, workshop-et dhe galeritë.</p>
+            </div>
+
+            <!-- Club Tabs Navigation Switcher -->
+            <div class="flex justify-center mb-12 overflow-x-auto pb-2">
+                <div class="bg-pane-60 p-1 rounded-full inline-flex space-x-1 border border-forest-500/10">
+                    <button id="tab-btn-hiking" onclick="switchClubTab('hiking')" class="px-6 py-3 rounded-full font-bold text-sm transition-all bg-forest-600 text-pane-50 shadow-md">
+                        🟢 Klubi i Hiking & Ekspeditave
+                    </button>
+                    <button id="tab-btn-biologji" onclick="switchClubTab('biologji')" class="px-6 py-3 rounded-full font-bold text-sm transition-all text-charcoal hover:text-forest-600">
+                        🔵 Klubi i Biologjisë
+                    </button>
+                    <button id="tab-btn-bioteknologji" onclick="switchClubTab('bioteknologji')" class="px-6 py-3 rounded-full font-bold text-sm transition-all text-charcoal hover:text-forest-600">
+                        🟣 Klubi i Bioteknologjisë
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 1: HIKING (Exact Spec) -->
+            <div id="club-pane-hiking" class="club-detail-pane space-y-10">
+                <div class="relative rounded-3xl overflow-hidden h-72 shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-forest-600/70 backdrop-blur-xs flex items-center p-8 sm:p-12">
+                        <div class="text-pane-50 max-w-2xl">
+                            <span class="bg-pane-50 text-forest-600 text-xs font-bold px-3 py-1 rounded-full uppercase">Klub i Hapur për të Gjithë UT</span>
+                            <h2 class="text-3xl sm:text-4xl font-serif font-bold mt-3">Klubi i Hiking & Ekspeditave</h2>
+                            <p class="mt-2 text-pane-100 text-sm">Eksplorimi i natyrës, monitorimi i faunës me kamera-kurth dhe udhëzuesi i pajisjeve.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Pedagogu i Natyrës & Udhëzuesi -->
+                    <div class="glass-card p-6 rounded-2xl border border-forest-600/10">
+                        <h3 class="text-xl font-serif font-bold text-forest-600 mb-3 flex items-center">
+                            <i class="fa-solid fa-compass text-forest-500 mr-3"></i>
+                            Roli i Pedagogut të Natyrës & Siguria
+                        </h3>
+                        <p class="text-xs text-charcoal/80 leading-relaxed">
+                            Çdo ekspeditë udhëhiqet nga pedagogë të certifikuar të natyrës dhe udhëzues malorë. Përpara çdo ngjitjeje zhvillohet seanca e udhëzimit për sigurinë në terren.
+                        </p>
+                    </div>
+
+                    <!-- Udhëzuesi i Pajisjeve -->
+                    <div class="glass-card p-6 rounded-2xl border border-forest-600/10">
+                        <h3 class="text-xl font-serif font-bold text-forest-600 mb-3 flex items-center">
+                            <i class="fa-solid fa-kit-medical text-forest-500 mr-3"></i>
+                            Lista e Pajisjeve të Terrenit
+                        </h3>
+                        <ul class="text-xs text-charcoal/80 space-y-1.5 list-disc list-inside">
+                            <li>Këpucë malore me mbërthim glezne (Hiking Boots)</li>
+                            <li>Çantë shpine 30L me mbrojtëse shiu</li>
+                            <li>Dritë koke (Headlamp) & Kit Ndihmës së Shpejtë</li>
+                            <li>Kamera-kurth për vëzhgimin e faunës egër</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: BIOLOGJI (Exact Spec) -->
+            <div id="club-pane-biologji" class="club-detail-pane hidden space-y-10">
+                <div class="relative rounded-3xl overflow-hidden h-72 shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-blue-900/70 backdrop-blur-xs flex items-center p-8 sm:p-12">
+                        <div class="text-pane-50 max-w-2xl">
+                            <span class="bg-pane-50 text-blue-900 text-xs font-bold px-3 py-1 rounded-full uppercase">Kërkim & Mjedis</span>
+                            <h2 class="text-3xl sm:text-4xl font-serif font-bold mt-3">Klubi i Biologjisë</h2>
+                            <p class="mt-2 text-pane-100 text-sm">Fokusuar në leksione të hapura, fushata mjedisore dhe projekte kërkimore shkencore.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-2xl">
+                        <span class="text-xs font-bold text-blue-600 uppercase">Aktivitet 01</span>
+                        <h4 class="font-bold font-serif text-forest-600 text-lg mt-1">Leksione të Hapura Akademike</h4>
+                        <p class="text-xs text-charcoal/75 mt-2">Seminare çdo muaj me pedagogë ftuar mbi taksonominë dhe konservimin.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <span class="text-xs font-bold text-blue-600 uppercase">Aktivitet 02</span>
+                        <h4 class="font-bold font-serif text-forest-600 text-lg mt-1">Fushata Ndërgjegjësuese Mjedisore</h4>
+                        <p class="text-xs text-charcoal/75 mt-2">Projektet për ruajtjen e lumenjve të egër dhe pastrimin e zonave bregdetare.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <span class="text-xs font-bold text-blue-600 uppercase">Aktivitet 03</span>
+                        <h4 class="font-bold font-serif text-forest-600 text-lg mt-1">Kërkim Terreni & Taksonomi</h4>
+                        <p class="text-xs text-charcoal/75 mt-2">Kolektimi i herbariumeve dhe inventarizimi i specieve endemitike.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: BIOTEKNOLOGJI (Exact Spec) -->
+            <div id="club-pane-bioteknologji" class="club-detail-pane hidden space-y-10">
+                <div class="relative rounded-3xl overflow-hidden h-72 shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-purple-900/70 backdrop-blur-xs flex items-center p-8 sm:p-12">
+                        <div class="text-pane-50 max-w-2xl">
+                            <span class="bg-pane-50 text-purple-900 text-xs font-bold px-3 py-1 rounded-full uppercase">Bio-Inovacion & Praktika</span>
+                            <h2 class="text-3xl sm:text-4xl font-serif font-bold mt-3">Klubi i Bioteknologjisë</h2>
+                            <p class="mt-2 text-pane-100 text-sm">Lidhja me praktikën (internships), workshop-et me softuerë biologjikë dhe trajnimet në pajisje.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border border-forest-600/10">
+                    <h3 class="text-2xl font-serif font-bold text-forest-600 mb-4">Programi i Trajnimeve me Softuerë & Praktika</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-pane-100 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-forest-600 text-sm">Workshop 1: BioPython & BLAST Analysis</h4>
+                                <p class="text-xs text-charcoal/70">Sekuencimi i ADN-së dhe kërkimi në bazat globale të të dhënave (NCBI).</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-bold">Internship Ready</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-pane-100 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-forest-600 text-sm">Workshop 2: PyMOL & Protein Docking</h4>
+                                <p class="text-xs text-charcoal/70">Modelimi 3D i strukturave proteinike dhe aplikimi në farmakologji.</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-bold">Laborator 204</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== KALENDARI INTERAKTIV I NGJARJEVE ==================== -->
+        <section id="section-kalendari" class="page-section hidden py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-forest-500 font-bold text-xs tracking-widest uppercase">Ngjarjet & Agjenda</span>
+                <h1 class="text-4xl font-serif font-bold text-forest-600 mt-1">Kalendari Interaktiv i Ngjarjeve</h1>
+                <p class="text-charcoal/70 mt-2 text-base">Klikoni mbi ngjarjet në kalendar për të parë datat, vendin, orën dhe çfarë përfitoni.</p>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-xl border border-forest-600/10 mb-12">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-4 border-b border-forest-600/10">
+                    <h2 class="text-2xl font-serif font-bold text-forest-600 flex items-center">
+                        <i class="fa-regular fa-calendar-check text-forest-500 mr-3"></i>
+                        Tetor — Nëntor 2026
+                    </h2>
+                    <!-- Club Legend -->
+                    <div class="flex items-center space-x-3 text-xs font-semibold mt-3 sm:mt-0">
+                        <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-forest-600 mr-1.5"></span> Hiking</span>
+                        <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-blue-600 mr-1.5"></span> Biologji</span>
+                        <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-purple-600 mr-1.5"></span> Bioteknologji</span>
+                    </div>
+                </div>
+
+                <!-- Days Header -->
+                <div class="grid grid-cols-7 gap-2 text-center text-xs font-bold text-forest-600 uppercase mb-3">
+                    <div>Hën</div><div>Mar</div><div>Mër</div><div>Enj</div><div>Prem</div><div>Sht</div><div>Die</div>
+                </div>
+
+                <!-- Calendar Days Matrix -->
+                <div class="grid grid-cols-7 gap-2 text-sm">
+                    <!-- Week 1 -->
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">1</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">2</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">3</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5">
+                        <span class="text-xs font-bold text-charcoal/60">4</span>
+                        <button onclick="openCalendarModal('Ekspeditë Natyre në Dajt', '04 Tetor 2026', '08:30', 'Parku Kombëtar Dajt', 'Hiking & Ekspedita', 'Çertifikatë Pjesëmarrjeje në Terren + Kredite')" class="w-full mt-1 p-1.5 rounded-lg club-tag-hiking text-[10px] font-bold text-left truncate hover:opacity-90">
+                            🟢 Hiking Dajt
+                        </button>
+                    </div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">5</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">6</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">7</span></div>
+
+                    <!-- Week 2 -->
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">8</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5">
+                        <span class="text-xs font-bold text-charcoal/60">9</span>
+                        <button onclick="openCalendarModal('Workshop BioPython', '09 Tetor 2026', '14:00', 'Laboratori i Bioteknologjisë 204', 'Bioteknologji', 'Trajnim Praktik Softuerik + Materiale Mësimore')" class="w-full mt-1 p-1.5 rounded-lg club-tag-biotek text-[10px] font-bold text-left truncate hover:opacity-90">
+                            🟣 BioPython Lab
+                        </button>
+                    </div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5">
+                        <span class="text-xs font-bold text-charcoal/60">10</span>
+                        <button onclick="openCalendarModal('Seminar: Biodiversiteti Ujor', '10 Tetor 2026', '11:00', 'Amfiteatri Kryesor UT', 'Biologji', 'Akses në Materiale Kërkimore Shkencore')" class="w-full mt-1 p-1.5 rounded-lg club-tag-biologji text-[10px] font-bold text-left truncate hover:opacity-90">
+                            🔵 Seminar Biodiversiteti
+                        </button>
+                    </div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">11</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">12</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">13</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">14</span></div>
+
+                    <!-- Week 3 -->
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">15</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-forest-50 border border-forest-500 shadow-sm">
+                        <span class="text-xs font-bold text-forest-600">16</span>
+                        <button onclick="openCalendarModal('Kamping Shkencor 3-Ditor', '16 Tetor 2026', '07:00', 'Llogara & Vlorë', 'Hiking & Ekspedita', 'Përvojë Terreni + Çertifikatë Ekspedite')" class="w-full mt-1 p-1.5 rounded-lg club-tag-hiking text-[10px] font-bold text-left truncate hover:opacity-90">
+                            🟢 Kamping Llogara
+                        </button>
+                    </div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">17</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">18</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">19</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">20</span></div>
+                    <div class="min-h-[85px] p-2 rounded-xl bg-pane-100/60 border border-forest-600/5"><span class="text-xs font-bold text-charcoal/60">21</span></div>
+                </div>
+            </div>
+
+            <!-- Modal for Event Details -->
+            <div id="calendar-modal" class="hidden fixed inset-0 bg-forest-900/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+                <div class="bg-pane-50 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative border border-forest-600/20">
+                    <button onclick="closeCalendarModal()" class="absolute top-5 right-5 text-charcoal/60 hover:text-forest-600">
+                        <i class="fa-solid fa-xmark text-2xl"></i>
+                    </button>
+                    <span id="cal-modal-club" class="px-3 py-1 rounded-full bg-forest-600 text-pane-50 text-xs font-bold uppercase tracking-wider">Klubi</span>
+                    <h3 id="cal-modal-title" class="text-2xl font-serif font-bold text-forest-600 mt-3">Titulli i Eventit</h3>
+                    
+                    <div class="mt-6 space-y-3 text-sm text-charcoal/90">
+                        <p class="flex items-center"><i class="fa-regular fa-calendar text-forest-500 w-6"></i> <strong>Data:</strong> &nbsp;<span id="cal-modal-date">--</span></p>
+                        <p class="flex items-center"><i class="fa-regular fa-clock text-forest-500 w-6"></i> <strong>Ora:</strong> &nbsp;<span id="cal-modal-time">--:--</span></p>
+                        <p class="flex items-center"><i class="fa-solid fa-location-dot text-forest-500 w-6"></i> <strong>Vendndodhja:</strong> &nbsp;<span id="cal-modal-location">--</span></p>
+                        
+                        <!-- Exact Spec: Me këtë aktivitet merrni... -->
+                        <div class="p-4 rounded-xl bg-forest-50 border border-forest-600/10 mt-4">
+                            <span class="block text-xs font-bold text-forest-600 uppercase tracking-wider">Me këtë aktivitet merrni:</span>
+                            <p id="cal-modal-perks" class="text-xs font-medium text-forest-700 mt-1">--</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="closeCalendarModal(); navigateTo('anetesohu');" class="w-full mt-6 py-3.5 rounded-full bg-forest-600 hover:bg-forest-500 text-pane-50 font-bold transition shadow-md">
+                        Regjistrohu Tani për këtë Aktivitet
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== FORMULARI "BËHU ANËTAR" ==================== -->
+        <section id="section-anetesohu" class="page-section hidden py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl shadow-xl border border-forest-600/10 p-8 sm:p-12">
+                <div class="text-center mb-10">
+                    <span class="text-forest-500 font-bold text-xs tracking-widest uppercase">Formulari Zyrtar</span>
+                    <h1 class="text-3xl font-serif font-bold text-forest-600 mt-1">Bëhu Anëtar i Genlife</h1>
+                    <p class="text-charcoal/70 text-sm mt-2">Plotësoni të dhënat tuaja për t'u bërë pjesë e rrjetit studentor shkencor.</p>
+                </div>
+
+                <form id="anetesohu-form" onsubmit="handleRegistration(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-forest-600 uppercase tracking-wider mb-2">Emri *</label>
+                            <input type="text" required placeholder="Emri juaj" class="w-full px-4 py-3.5 rounded-xl bg-pane-100 border border-forest-600/10 focus:outline-none focus:ring-2 focus:ring-forest-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-600 uppercase tracking-wider mb-2">Mbiemri *</label>
+                            <input type="text" required placeholder="Mbiemri juaj" class="w-full px-4 py-3.5 rounded-xl bg-pane-100 border border-forest-600/10 focus:outline-none focus:ring-2 focus:ring-forest-500 text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-forest-600 uppercase tracking-wider mb-2">E-mail *</label>
+                            <input type="email" required placeholder="emri@universiteti.edu.al" class="w-full px-4 py-3.5 rounded-xl bg-pane-100 border border-forest-600/10 focus:outline-none focus:ring-2 focus:ring-forest-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-forest-600 uppercase tracking-wider mb-2">Departamenti / Viti *</label>
+                            <input type="text" required placeholder="Shembull: Biologji, Viti 2" class="w-full px-4 py-3.5 rounded-xl bg-pane-100 border border-forest-600/10 focus:outline-none focus:ring-2 focus:ring-forest-500 text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Checkboxes for Club Selection -->
+                    <div>
+                        <label class="block text-xs font-bold text-forest-600 uppercase tracking-wider mb-3">Zgjidh Klubin ku dëshironi të anëtarësoheni:</label>
+                        <div class="space-y-3 bg-pane-100 p-5 rounded-2xl border border-forest-600/10">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="club_selection" value="Biologji" class="w-5 h-5 text-forest-600 rounded border-forest-300 focus:ring-forest-500">
+                                <span class="text-sm font-semibold text-charcoal">🔵 Klubi i Biologjisë</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="club_selection" value="Bioteknologji" class="w-5 h-5 text-forest-600 rounded border-forest-300 focus:ring-forest-500">
+                                <span class="text-sm font-semibold text-charcoal">🟣 Klubi i Bioteknologjisë</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="club_selection" value="Hiking" class="w-5 h-5 text-forest-600 rounded border-forest-300 focus:ring-forest-500">
+                                <span class="text-sm font-semibold text-charcoal">🟢 Klubi i Hiking & Ekspeditave</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 rounded-full bg-forest-600 hover:bg-forest-500 text-pane-50 font-bold transition shadow-lg text-base">
+                        Dërgo Aplikimin e Anëtarësimit
+                    </button>
+
+                    <p class="text-center text-xs text-charcoal/60 mt-2">
+                        Faleminderit që mbështetni rrjetin studentor shkencor Genlife!
+                    </p>
+                </form>
+
+                <!-- Feedback Toast -->
+                <div id="form-toast" class="hidden mt-6 p-4 rounded-2xl bg-forest-50 border border-forest-500 text-forest-700 text-center font-semibold">
+                    <i class="fa-solid fa-circle-check text-2xl text-forest-500 mb-1 block"></i>
+                    Aplikimi juaj u pranua me sukses! Do t'ju kontaktojmë së shpejti në e-mail.
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== BLOG SECTION ==================== -->
+        <section id="section-blog" class="page-section hidden py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-forest-500 font-bold text-xs tracking-widest uppercase">Artikuj & Njoftime</span>
+                <h1 class="text-4xl font-serif font-bold text-forest-600 mt-1">Blogu Shkencor Genlife</h1>
+                <p class="text-charcoal/70 mt-2 text-base">Publikime nga Pedagogët Mentorë dhe Studentët tanë kërkues.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <article class="glass-card rounded-3xl overflow-hidden border border-forest-600/10 shadow-sm hover:shadow-xl transition">
+                    <img src="https://images.unsplash.com/photo-1507668077129-56e32842fceb?q=80&w=600&auto=format&fit=crop" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-xs font-bold text-forest-500 uppercase">Nga Pedagogët</span>
+                        <h3 class="text-xl font-serif font-bold text-forest-600 mt-1">Rëndësia e Monitorimit Molekular të Biodiversitetit</h3>
+                        <p class="text-xs text-charcoal/70 mt-2">Nga Dr. Elona Rada - Vështrim mbi metodat e reja të ADN-së mjedisore (eDNA)...</p>
+                    </div>
+                </article>
+
+                <article class="glass-card rounded-3xl overflow-hidden border border-forest-600/10 shadow-sm hover:shadow-xl transition">
+                    <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=600&auto=format&fit=crop" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-xs font-bold text-forest-500 uppercase">Nga Studentët</span>
+                        <h3 class="text-xl font-serif font-bold text-forest-600 mt-1">Udhëtimi ynë në Parkun Kombëtar Llogara</h3>
+                        <p class="text-xs text-charcoal/70 mt-2">Ditar nga terreni mbi instalimin e kamerave-kurth për gjitarët e egër...</p>
+                    </div>
+                </article>
+
+                <article class="glass-card rounded-3xl overflow-hidden border border-forest-600/10 shadow-sm hover:shadow-xl transition">
+                    <img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?q=80&w=600&auto=format&fit=crop" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-xs font-bold text-forest-500 uppercase">Nga Pedagogët</span>
+                        <h3 class="text-xl font-serif font-bold text-forest-600 mt-1">Sfidat e Bioteknologjisë Moderne në Shqipëri</h3>
+                        <p class="text-xs text-charcoal/70 mt-2">Nga Prof. Asoc. Arben Dori - Mundësitë e praktikave për studentët tanë...</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Section (Direct Alignment with Exact Social Spec: Facebook, Instagram, Gmail, LinkedIn) -->
+    <footer class="bg-forest-600 text-pane-50 mt-20 border-t border-forest-500/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
+                
+                <!-- Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-9 h-9 rounded-xl bg-pane-50 flex items-center justify-center text-forest-600">
+                            <i class="fa-solid fa-leaf text-base"></i>
+                        </div>
+                        <span class="text-2xl font-bold font-serif text-pane-50 tracking-tight">Genlife</span>
+                    </div>
+                    <p class="text-xs text-pane-100/80 leading-relaxed">
+                        Platforma zyrtare e rrjetit studentor që kombinon shkencën, kërkimin laboratorik dhe eksplorimin e natyrës.
+                    </p>
+                </div>
+
+                <!-- Quick Navigation -->
+                <div>
+                    <h4 class="text-xs font-bold font-serif text-pane-50 uppercase tracking-widest mb-4">Navigimi</h4>
+                    <ul class="space-y-2 text-xs text-pane-100/80">
+                        <li><button onclick="navigateTo('home')" class="hover:text-pane-50 transition">Faqja Kryesore</button></li>
+                        <li><button onclick="navigateTo('struktura')" class="hover:text-pane-50 transition">Struktura Organizational</button></li>
+                        <li><button onclick="navigateTo('klubet')" class="hover:text-pane-50 transition">Klubet Shkencore</button></li>
+                        <li><button onclick="navigateTo('kalendari')" class="hover:text-pane-50 transition">Kalendari i Ngjarjeve</button></li>
+                    </ul>
+                </div>
+
+                <!-- Exact Social Icons Specified in Sketches: Facebook, Instagram, Gmail, LinkedIn -->
+                <div>
+                    <h4 class="text-xs font-bold font-serif text-pane-50 uppercase tracking-widest mb-4">Na Ndiqni Në Sociale</h4>
+                    <div class="flex space-x-3">
+                        <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-forest-500/50 flex items-center justify-center text-pane-50 hover:bg-pane-50 hover:text-forest-600 transition shadow-sm" title="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-forest-500/50 flex items-center justify-center text-pane-50 hover:bg-pane-50 hover:text-forest-600 transition shadow-sm" title="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="mailto:info@genlife.al" class="w-10 h-10 rounded-full bg-forest-500/50 flex items-center justify-center text-pane-50 hover:bg-pane-50 hover:text-forest-600 transition shadow-sm" title="Gmail">
+                            <i class="fa-regular fa-envelope"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" class="w-10 h-10 rounded-full bg-forest-500/50 flex items-center justify-center text-pane-50 hover:bg-pane-50 hover:text-forest-600 transition shadow-sm" title="LinkedIn">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Direct Contact Information -->
+                <div>
+                    <h4 class="text-xs font-bold font-serif text-pane-50 uppercase tracking-widest mb-4">Kontakt</h4>
+                    <ul class="space-y-2.5 text-xs text-pane-100/80">
+                        <li class="flex items-center space-x-2">
+                            <i class="fa-solid fa-phone text-forest-200"></i>
+                            <span>+355 69 00 00 000</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fa-solid fa-envelope text-forest-200"></i>
+                            <span>info@genlife.al</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fa-solid fa-building-columns text-forest-200"></i>
+                            <span>Universiteti i Tiranës, Shqipëri</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="border-t border-forest-500/20 pt-6 text-center text-xs text-pane-100/60">
+                <p>Genlife &copy; 2026. Të gjitha të drejtat të rezervuara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Controller -->
+    <script>
+        // SPA Page Router
+        function navigateTo(pageId, subTab = null) {
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(p => p.classList.add('hidden'));
+
+            const activePage = document.getElementById('section-' + pageId);
+            if (activePage) {
+                activePage.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            if (pageId === 'klubet' && subTab) {
+                switchClubTab(subTab);
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Club Detail Tab Switcher
+        function switchClubTab(tabKey) {
+            const panes = document.querySelectorAll('.club-detail-pane');
+            panes.forEach(pane => pane.classList.add('hidden'));
+
+            const targetPane = document.getElementById('club-pane-' + tabKey);
+            if (targetPane) {
+                targetPane.classList.remove('hidden');
+            }
+
+            const buttons = document.querySelectorAll('[id^="tab-btn-"]');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-forest-600', 'text-pane-50', 'shadow-md');
+                btn.classList.add('text-charcoal');
+            });
+
+            const activeBtn = document.getElementById('tab-btn-' + tabKey);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-forest-600', 'text-pane-50', 'shadow-md');
+                activeBtn.classList.remove('text-charcoal');
+            }
+        }
+
+        // Calendar Modal Functions
+        function openCalendarModal(title, date, time, location, club, perks) {
+            document.getElementById('cal-modal-title').innerText = title;
+            document.getElementById('cal-modal-date').innerText = date;
+            document.getElementById('cal-modal-time').innerText = time;
+            document.getElementById('cal-modal-location').innerText = location;
+            document.getElementById('cal-modal-club').innerText = club;
+            document.getElementById('cal-modal-perks').innerText = perks;
+            document.getElementById('calendar-modal').classList.remove('hidden');
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendar-modal').classList.add('hidden');
+        }
+
+        // Registration Form Submission Handler
+        function handleRegistration(e) {
+            e.preventDefault();
+            document.getElementById('anetesohu-form').reset();
+            const toast = document.getElementById('form-toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 6000);
+        }
+    </script>
+</body>
+</html>
